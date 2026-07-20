@@ -28,3 +28,11 @@ The app loads games from a CSV file bundled in the assets.
 - `ui/list`: Screen and ViewModel for displaying the game list.
 - `ui/components`: Reusable UI components.
 - `di`: Hilt modules for dependency injection.
+
+## Data Attribution
+
+The game collection data used in this app is sourced from [BoardGameGeek](https://boardgamegeek.com).
+
+- **Data Source**: The sample `collection.csv` is based on the collection of user [katie5](https://boardgamegeek.com/collection/user/katie5) on BoardGameGeek.
+- **API**: Data was retrieved using the [BoardGameGeek XML API2](https://boardgamegeek.com/wiki/page/BGG_XML_API2).
+- **Disclaimer**: This app is not affiliated with, maintained, authorized, or sponsored by BoardGameGeek. All product and company names are the registered trademarks of their original owners. The use of any trade name or trademark is for identification and reference purposes only and does not imply any association with the trademark holder of their product brand.
