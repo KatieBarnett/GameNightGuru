@@ -1,0 +1,41 @@
+package dev.katiebarnett.gamenightguru.di
+
+import android.content.Context
+import androidx.room.Room
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import dev.katiebarnett.gamenightguru.data.database.AppDatabase
+import dev.katiebarnett.gamenightguru.data.database.GameDao
+import dev.katiebarnett.gamenightguru.data.repository.GameRepository
+import dev.katiebarnett.gamenightguru.data.repository.GameRepositoryImpl
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+    @Binds
+    @Singleton
+    abstract fun bindGameRepository(repositoryImpl: GameRepositoryImpl): GameRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "game_database"
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    fun provideGameDao(database: AppDatabase): GameDao = database.gameDao()
+}
