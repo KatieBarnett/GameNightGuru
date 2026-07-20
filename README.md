@@ -1,11 +1,11 @@
 # Game Night Guru
 
-This is a simple demo app for the Game Night Guru workshop.
+This is a simple demo app for the "AI, Meet App: Teaching Android Apps to "Talk" to Gemini via App Functions" workshop.
 
 ## Screenshots
 
-| Game List | Search |
-| --- | --- |
+| Game List                               | Search                                 |
+|-----------------------------------------|----------------------------------------|
 | ![Game List](screenshots/game_list.png) | ![Search](screenshots/game_search.png) |
 
 ## Architecture
