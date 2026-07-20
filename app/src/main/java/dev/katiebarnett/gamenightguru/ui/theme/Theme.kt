@@ -9,35 +9,42 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = CoralRed,
+    secondary = SkyBlue,
+    tertiary = GoldenYellow
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = CoralRedDark,
     onPrimary = Color.White,
+    primaryContainer = Color(0xFFFFDADE),
+    onPrimaryContainer = Color(0xFF410015),
+    secondary = SkyBlueDark,
     onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondaryContainer = Color(0xFFBFE9FF),
+    onSecondaryContainer = Color(0xFF001F2A),
+    tertiary = GoldenYellowDark,
+    onTertiary = Color.Black,
+    tertiaryContainer = Color(0xFFFFE082),
+    onTertiaryContainer = Color(0xFF241A00),
+    background = Color(0xFFF0F9FF), // Very soft sky blue background
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF201A19),
+    surfaceVariant = Color(0xFFF4DDDE),
+    onSurfaceVariant = Color(0xFF534346),
 )
+
 
 @Composable
 fun GameNightGuruTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // Set dynamicColor to false by default to ensure our custom "Playful & Bold" 
+    // theme is applied instead of the system's dynamic colors.
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
