@@ -2,6 +2,12 @@
 
 This is a simple demo app for the Game Night Guru workshop.
 
+## Screenshots
+
+| Game List | Search |
+| --- | --- |
+| ![Game List](screenshots/game_list.png) | ![Search](screenshots/game_search.png) |
+
 ## Architecture
 
 - **Jetpack Compose**: Modern UI toolkit.
