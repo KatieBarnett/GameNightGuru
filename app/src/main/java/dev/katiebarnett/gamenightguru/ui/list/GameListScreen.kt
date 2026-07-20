@@ -1,10 +1,14 @@
 package dev.katiebarnett.gamenightguru.ui.list
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,32 +28,56 @@ fun GameListScreen(
     viewModel: GameListViewModel = hiltViewModel()
 ) {
     val games by viewModel.games.collectAsState()
-    GameListContent(games = games, modifier = modifier)
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    GameListContent(
+        games = games,
+        searchQuery = searchQuery,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        modifier = modifier
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListContent(
     games: List<GameEntity>,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { 
-                    Text(
-                        "GAME NIGHT GURU", 
-                        fontWeight = FontWeight.Black,
-                        style = MaterialTheme.typography.titleLarge
-                    ) 
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+            Column {
+                CenterAlignedTopAppBar(
+                    title = { 
+                        Text(
+                            "GAME NIGHT GURU", 
+                            fontWeight = FontWeight.Black,
+                            style = MaterialTheme.typography.titleLarge
+                        ) 
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 )
-            )
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = onSearchQueryChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    placeholder = { Text("Search games...") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    )
+                )
+            }
         }
     ) { padding ->
         LazyColumn(
@@ -121,7 +149,9 @@ fun GameListScreenPreview() {
                     bggRecAgeRange = "8+",
                     itemType = "standalone"
                 )
-            )
+            ),
+            searchQuery = "",
+            onSearchQueryChanged = {}
         )
     }
 }
