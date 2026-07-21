@@ -19,12 +19,12 @@ class GameListViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    val games = repository.getAllGames()
+    val games = repository.getAllGamesWithStats()
         .combine(_searchQuery) { games, query ->
             if (query.isEmpty()) {
                 games
             } else {
-                games.filter { it.objectName.contains(query, ignoreCase = true) }
+                games.filter { it.game.objectName.contains(query, ignoreCase = true) }
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

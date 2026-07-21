@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.katiebarnett.gamenightguru.data.database.AppDatabase
 import dev.katiebarnett.gamenightguru.data.database.GameDao
+import dev.katiebarnett.gamenightguru.data.database.PlayDao
 import dev.katiebarnett.gamenightguru.data.repository.GameRepository
 import dev.katiebarnett.gamenightguru.data.repository.GameRepositoryImpl
 import javax.inject.Singleton
@@ -32,10 +33,13 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "game_database"
-        ).fallbackToDestructiveMigration()
+        ).fallbackToDestructiveMigration(true)
             .build()
     }
 
     @Provides
     fun provideGameDao(database: AppDatabase): GameDao = database.gameDao()
+
+    @Provides
+    fun providePlayDao(database: AppDatabase): PlayDao = database.playDao()
 }

@@ -9,7 +9,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,11 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.katiebarnett.gamenightguru.data.database.GameEntity
+import dev.katiebarnett.gamenightguru.data.database.GameWithStats
 import dev.katiebarnett.gamenightguru.ui.components.GameItem
 import dev.katiebarnett.gamenightguru.ui.theme.GameNightGuruTheme
 
 @Composable
 fun GameListScreen(
+    onGameClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GameListViewModel = hiltViewModel()
 ) {
@@ -33,6 +43,7 @@ fun GameListScreen(
         games = games,
         searchQuery = searchQuery,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onGameClick = onGameClick,
         modifier = modifier
     )
 }
@@ -40,9 +51,10 @@ fun GameListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListContent(
-    games: List<GameEntity>,
+    games: List<GameWithStats>,
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
+    onGameClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -87,7 +99,7 @@ fun GameListContent(
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             items(games) { game ->
-                GameItem(game = game)
+                GameItem(gameWithStats = game, onClick = { onGameClick(game.game.objectId) })
             }
         }
     }
@@ -99,59 +111,68 @@ fun GameListScreenPreview() {
     GameNightGuruTheme {
         GameListContent(
             games = listOf(
-                GameEntity(
-                    objectId = 173346,
-                    objectName = "7 Wonders Duel",
-                    averageRating = 8.07,
-                    numPlays = 5,
-                    own = true,
-                    forTrade = false,
-                    want = false,
-                    wantToBuy = false,
-                    wantToPlay = true,
-                    prevOwned = false,
-                    preOrdered = false,
-                    avgWeight = 2.22,
-                    rank = 24,
-                    minPlayers = 2,
-                    maxPlayers = 2,
-                    playingTime = 30,
-                    maxPlayTime = 30,
-                    minPlayTime = 30,
-                    yearPublished = 2015,
-                    bggRecPlayers = "2",
-                    bggBestPlayers = "2",
-                    bggRecAgeRange = "10+",
-                    itemType = "standalone"
+                GameWithStats(
+                    game = GameEntity(
+                        objectId = 173346,
+                        objectName = "7 Wonders Duel",
+                        averageRating = 8.07,
+                        numPlays = 5,
+                        own = true,
+                        forTrade = false,
+                        want = false,
+                        wantToBuy = false,
+                        wantToPlay = true,
+                        prevOwned = false,
+                        preOrdered = false,
+                        avgWeight = 2.22,
+                        rank = 24,
+                        minPlayers = 2,
+                        maxPlayers = 2,
+                        playingTime = 30,
+                        maxPlayTime = 30,
+                        minPlayTime = 30,
+                        yearPublished = 2015,
+                        bggRecPlayers = "2",
+                        bggBestPlayers = "2",
+                        bggRecAgeRange = "10+",
+                        itemType = "standalone"
+                    ),
+                    userPlayCount = 2,
+                    userAvgRating = 8.5f
                 ),
-                GameEntity(
-                    objectId = 295947,
-                    objectName = "Cascadia",
-                    averageRating = 7.88,
-                    numPlays = 10,
-                    own = true,
-                    forTrade = false,
-                    want = false,
-                    wantToBuy = false,
-                    wantToPlay = true,
-                    prevOwned = false,
-                    preOrdered = false,
-                    avgWeight = 1.84,
-                    rank = 60,
-                    minPlayers = 1,
-                    maxPlayers = 4,
-                    playingTime = 45,
-                    maxPlayTime = 45,
-                    minPlayTime = 30,
-                    yearPublished = 2021,
-                    bggRecPlayers = "1,2,3,4",
-                    bggBestPlayers = "2,3",
-                    bggRecAgeRange = "8+",
-                    itemType = "standalone"
+                GameWithStats(
+                    game = GameEntity(
+                        objectId = 295947,
+                        objectName = "Cascadia",
+                        averageRating = 7.88,
+                        numPlays = 10,
+                        own = true,
+                        forTrade = false,
+                        want = false,
+                        wantToBuy = false,
+                        wantToPlay = true,
+                        prevOwned = false,
+                        preOrdered = false,
+                        avgWeight = 1.84,
+                        rank = 60,
+                        minPlayers = 1,
+                        maxPlayers = 4,
+                        playingTime = 45,
+                        maxPlayTime = 45,
+                        minPlayTime = 30,
+                        yearPublished = 2021,
+                        bggRecPlayers = "1,2,3,4",
+                        bggBestPlayers = "2,3",
+                        bggRecAgeRange = "8+",
+                        itemType = "standalone"
+                    ),
+                    userPlayCount = 0,
+                    userAvgRating = null
                 )
             ),
             searchQuery = "",
-            onSearchQueryChanged = {}
+            onSearchQueryChanged = {},
+            onGameClick = {}
         )
     }
 }
