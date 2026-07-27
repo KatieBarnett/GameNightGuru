@@ -12,9 +12,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = CoralRed,
-    secondary = SkyBlue,
-    tertiary = GoldenYellow
+    primary = CoralRedDark,
+    onPrimary = Color(0xFF680016),
+    primaryContainer = Color(0xFF920023),
+    onPrimaryContainer = Color(0xFFFFDADE),
+    secondary = SkyBlueDark,
+    onSecondary = Color(0xFF003549),
+    secondaryContainer = Color(0xFF004D68),
+    onSecondaryContainer = Color(0xFFBFE9FF),
+    tertiary = GoldenYellowDark,
+    onTertiary = Color(0xFF432C00),
+    tertiaryContainer = Color(0xFF604100),
+    onTertiaryContainer = Color(0xFFFFE082),
+    background = DarkGreyBackground,
+    onBackground = Color(0xFFE2E2E6),
+    surface = Color(0xFF252729), // Lighter than background for depth
+    onSurface = Color(0xFFE2E2E6),
+    surfaceVariant = Color(0xFF534346),
+    onSurfaceVariant = Color(0xFFD8C2C4),
+    outline = Color(0xFF9C8D90), // Color for card borders
 )
 
 private val LightColorScheme = lightColorScheme(
