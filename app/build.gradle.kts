@@ -7,9 +7,7 @@ plugins {
 
 android {
     namespace = "dev.katiebarnett.gamenightguru"
-    compileSdk {
-        version = release(37)
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "dev.katiebarnett.gamenightguru"
@@ -61,7 +59,7 @@ dependencies {
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:2.11.0")
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     // Navigation 3
     implementation(libs.androidx.navigation3.runtime)
