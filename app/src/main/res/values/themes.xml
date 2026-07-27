@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.GameNightGuru" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/coral_red_dark</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.GameNightGuru</item>
+    </style>
 </resources>
