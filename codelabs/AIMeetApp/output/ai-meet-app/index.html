@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://distribute.kartikarora.me/css/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+    .code-container {
+      position: relative;
+    }
+    .copy-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #333;
+    }
+    .copy-button .material-icons {
+      font-size: 16px;
+    }
+    .code-container:hover .copy-button {
+      opacity: 1;
+    }
+    .copy-button:hover {
+      background: #fff;
+    }
+    code, pre, .prettyprint, code[class*="lang-"], pre[class*="lang-"],
+    google-codelab-step code, google-codelab-step pre,
+    .step__body code, .step__body pre {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    function copyToClipboard(button) {
+      const container = button.parentElement;
+      const code = container.querySelector('code').innerText;
+      
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(() => {
+          updateButtonText(button);
+        }).catch(err => {
+          console.error('Failed to copy: ', err);
+          fallbackCopy(code, button);
+        });
+      } else {
+        fallbackCopy(code, button);
+      }
+    }
+
+    function fallbackCopy(text, button) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-9999px";
+      textArea.style.top = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        updateButtonText(button);
+      } catch (err) {
+        console.error('Fallback copy failed: ', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function updateButtonText(button) {
+      const textSpan = button.querySelector('span:last-child');
+      const originalText = textSpan.textContent;
+      textSpan.textContent = 'Copied!';
+      setTimeout(() => {
+        textSpan.textContent = originalText;
+      }, 2000);
+    }
+  </script>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="ai-meet-app"
+                  title="AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions"
+                  environment="Web"
+                  feedback-link="">
+    <google-codelab-step label="Download and Install Android Studio" duration="0">
+      <p>If you haven&#39;t yet, download and install Android Studio. It is best to have the latest stable version from the <a href="https://developer.android.com/studio/?gclid=Cj0KCQiAjJOQBhCkARIsAEKMtO3zEhdK4_I0CEZic3UH4dl-9gVXuHFR9dCl3TOHKjmv3xWLU3UxfhYaApfAEALw_wcB&amp;gclsrc=aw.ds&amp;authuser=894489108" target="_blank">Android Studio download page</a>.</p>
+<p>For more detailed instructions, follow the <a href="https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio#0" target="_blank">Download and install Android Studio codelab</a>.</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Create an Android Emulator" duration="1">
+      <p>It can take a while for the emulator image to download, so while you are waiting, create a new emulator.</p>
+<p>For more detailed instructions, follow the <a href="https://developer.android.com/codelabs/basic-android-kotlin-compose-emulator#2" target="_blank">Run your first app on the Android Emulator codelab - Step 3</a>.</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Introducing Game Night Guru" duration="3">
+      <p>The demo app for this codelab is <strong>Game Night Guru</strong>, a boardgame collection manager and play tracker. It helps hobbyists keep track of the games they own and log their gaming sessions.</p>
+<p><a href="https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip" target="_blank">Download Source Code</a></p>
+<p>You can also clone it from github:</p>
+<ul>
+<li>Clone the the official App Functions repository using your terminal:git clone https://github.com/android/appfunctions.git
+</li>
+<li>Clone the official App Functions repository using your favourite source control application using:git@github.com:android/appfunctions.git
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Game Night Guru</th><th>Game List</th><th>Game Detail (Play Log)</th><th>Add Play Dialog</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="walkthrough_screenshot_1" src="assets/walkthrough_screenshot_1.png"></td><td><img alt="walkthrough_screenshot_2" src="assets/walkthrough_screenshot_2.png"></td><td><img alt="walkthrough_screenshot_3" src="assets/walkthrough_screenshot_3.png"></td><td><img alt="walkthrough_screenshot_4" src="assets/walkthrough_screenshot_4.png"></td>
+</tr>
+</tbody>
+</table>
+<h3>Core Features</h3>
+<ul>
+<li><strong>Game Collection Management:</strong> Browse a comprehensive list of board games in the library.</li>
+<li><strong>Detailed Insights:</strong> View specific details for each game, including player counts, recommended ages, and average playtime.</li>
+<li><strong>Play Tracking:</strong> Log gaming sessions, recording how many people played, how long it took, and how you&#39;d rate the experience.</li>
+</ul>
+<h3>App Walkthrough</h3>
+<h4>1. The Game List</h4>
+<p>The main screen of the app displays the board game collection. Each entry provides a quick glance at the game&#39;s title and its player count range.</p>
+<ul>
+<li><strong>Navigation:</strong> Tapping on any game in the list will take you to its details.</li>
+</ul>
+<h4>2. Game Details</h4>
+<p>The detail screen provides a deeper dive into a specific game. Here you can see:</p>
+<ul>
+<li><strong>Metadata:</strong> Playing time, player counts, and age recommendations.</li>
+<li><strong>Play History:</strong> A history of your logged sessions for this specific game.</li>
+<li><strong>Actions:</strong> A button to log a new play session.</li>
+</ul>
+<h4>3. Logging a Play</h4>
+<p>From the Game Detail screen, you can open the <strong>Add Play</strong> dialog. This allows you to enter:</p>
+<ul>
+<li>The number of players for that specific session.</li>
+<li>The actual duration of the game.</li>
+<li>A rating (1-10) for the session.</li>
+</ul>
+<h3>Technical Stack</h3>
+<p>The app is built using modern Android development practices:</p>
+<ul>
+<li><strong>Language:</strong> Kotlin</li>
+<li><strong>UI Framework:</strong> Jetpack Compose for a fully declarative UI.</li>
+<li><strong>Navigation:</strong> Jetpack Navigation 3.</li>
+<li><strong>Database:</strong> Room for local persistence of games and play records.</li>
+<li><strong>Dependency Injection:</strong> Hilt for managing app components.</li>
+</ul>
+<h3>Project Structure</h3>
+<ul>
+<li><code>data/database</code>: Room entity, DAO, and Database definition.</li>
+<li><code>data/repository</code>: Data source abstraction.</li>
+<li><code>data/importer</code>: Logic for parsing the CSV file.</li>
+<li><code>ui/list</code>: Screen and ViewModel for displaying the game list.</li>
+<li><code>ui/detail</code>: Screen and ViewModel for displaying the game detail (play log) &amp; add play dialog.</li>
+<li><code>ui/components</code>: Reusable UI components.</li>
+<li><code>di</code>: Hilt modules for dependency injection.</li>
+</ul>
+
+    </google-codelab-step>
+    <google-codelab-step label="Preparing for App Functions [TODO]" duration="5">
+      
+    </google-codelab-step>
+    <google-codelab-step label="Writing our first App Function [TODO]" duration="10">
+      <p>Content for step 2...</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Create an App Function using a Gemini Skill [TODO]" duration="10">
+      
+    </google-codelab-step>
+    <google-codelab-step label="Testing Your App Functions" duration="2">
+      <p>Now that we have some App Functions for Game Night Guru, it’s time to see them in action. We are going to test the plumbing to make sure the Android system sees our functions using ADB from the command line, and then use a testing agent to watch Gemini interact with our app.</p>
+<p>Make sure you have created an emulator (see step <strong>Create an Android Emulator</strong>) or connect a physical Android device via a cable and installed Game Night Guru onto the device.</p>
+<h3>Enable Developer Options</h3>
+<p>Before we can use ADB, we need to enable Developer Options on your physical device.</p>
+<ol>
+<li>Open your device <strong>Settings</strong>.</li>
+<li>Scroll down and tap <strong>About phone</strong>.<em>(Note: On Samsung devices, you will then need to tap </em><em><strong>Software information</strong></em><em>).</em></li>
+<li>Find the <strong>Build number</strong> and tap it <strong>7 times</strong> quickly.</li>
+<li>You will see a small message saying &quot;You are now a developer!&quot;.</li>
+<li>Go back to the main Settings menu, and you will now see <strong>Developer options</strong> listed at the bottom.</li>
+</ol>
+<p><a href="https://youtu.be/_tUGcSy3uBk" target="_blank">![Watch how to enable Developer Options](https://img.youtube.com/vi/_tUGcSy3uBk/0.jpg)</a></p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Install ADB (Android Debug Bridge)" duration="2">
+      <p><a href="https://developer.android.com/tools/adb" target="_blank">ADB</a> is the command-line tool that lets your computer talk to your Android device or emulator. Because we are using Android Studio for this codelab, you likely already have it installed! We just need to make sure you can run it from your terminal.</p>
+<p>To check that you have it installed, open your terminal and run:</p>
+<div class="code-container"><pre><code class=" language-bash">adb
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>You should see the version and install location:</p>
+<div class="code-container"><pre><code class=" language-bash">you@YourComputer GameNightGuru % adb
+Android Debug Bridge version 1.0.41
+Version 36.0.0-13206524
+Installed as /opt/homebrew/bin/adb
+Running on Darwin 25.5.0 (arm64)
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>If you don&#39;t see this, you can follow these install instructions:</p>
+<p><strong>Using Android Studio</strong></p>
+<p>Go to <strong>Tools &gt; SDK Manager &gt; SDK Tools</strong> and check <strong>Android SDK Platform-Tools</strong> and press <code>OK</code></p>
+<p><strong>For Mac Users:</strong></p>
+<p>The easiest way is using Homebrew. Open your terminal and run:</p>
+<div class="code-container"><pre><code class=" language-bash">brew install android-platform-tools
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p><strong>For Windows Users:</strong></p>
+<p>The fastest way is using Winget. Open PowerShell or Command Prompt and run:</p>
+<div class="code-container"><pre><code class=" language-bash">winget install Google.PlatformTools
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p><em>(Alternatively, download the </em><a href="https://developer.android.com/tools/releases/platform-tools" target="_blank">SDK Platform-Tools zip file</a><em>, extract it, and </em><a href="https://www.youtube.com/watch?v=UVlNBv3Yhv8" target="_blank">add the folder to your Windows system Environment Variables</a><em>).</em></p>
+<p><strong>Verify it works:</strong></p>
+<p>Try <code>adb</code> now!</p>
+<h3>Check your devices are connected</h3>
+<p>Plug in your device or start your emulator and run:</p>
+<div class="code-container"><pre><code class=" language-bash">adb devices
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>If you see a device listed, you are ready to go!</p>
+<p><img alt="adb_devices" src="assets/adb_devices.png"></p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Test App Functions Integration via ADB" duration="2">
+      <p>Before we bring AI into the mix, let’s verify that the Android OS has successfully registered the App Functions we just built.</p>
+<p>Run this command in your terminal to list all App Functions currently registered on your device:</p>
+<div class="code-container"><pre><code class=" language-bash">adb shell cmd app_function list-app-functions
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>Because that list can get long, you can filter it specifically for Game Night Guru using <code>grep</code>:</p>
+<div class="code-container"><pre><code class=" language-bash">adb shell cmd app_function list-app-functions | grep -A 20 dev.katiebarnett.gamenightguru
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>If you see the functions we wrote (like <code>queryGames</code>), everything is working and Game Night Guru is exposing its capabilities to the OS!<img alt="app_functions_json" src="assets/app_functions_json.png"></p>
+<h3>Something fun to explore</h3>
+<p>If you don&#39;t include the grep command (delete the  <code>| grep -A 20 dev.katiebarnett.gamenightguru</code> part) , what other app functions do you see on this device? Perhaps try it when you have your actual phone connected. Are any of your favourite apps already using App Functions?</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Download &amp; Install the Testing Agent" duration="5">
+      <p>Google provides a privileged Testing Agent app that acts as a stand-in for Gemini. This allows us to test end-to-end workflows without needing a full production system.</p>
+<ol>
+<li>To use the testing agent, you need to enable Developer Options on your emulator or device</li>
+<li>To get the Testing Agent app you can do one of the following:</li>
+</ol>
+<p><a href="https://github.com/android/appfunctions/archive/refs/heads/main.zip" target="_blank">Download Source Code</a></p>
+<ul>
+<li>Clone the the official App Functions repository using your terminal:git clone https://github.com/android/appfunctions.git
+</li>
+<li>Clone the official App Functions repository using your favourite source control application using:git@github.com:android/appfunctions.git
+</li>
+</ul>
+<ol start="2">
+<li>Open your terminal (or use the Android Studio Terminal) and change to the agent directory:</li>
+</ol>
+<div class="code-container"><pre><code class=" language-bash">cd appfunctions/agent
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<ol start="3">
+<li>Build and install the agent to your connected device using the provided script:</li>
+</ol>
+<div class="code-container"><pre><code class=" language-bash">./run_privileged.sh --build
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p><strong>⚠️ Important Note for Windows Users:</strong></p>
+<p>Because this is a <code>.sh</code> shell script, it will not run in standard Command Prompt or PowerShell. You must run this command using <strong>Git Bash</strong> (which is installed automatically if you have Git for Windows) or WSL (Windows Subsystem for Linux).</p>
+<p><img alt="run_privlaged" src="assets/run_privlaged.gif"></p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Using the Testing Agent" duration="2">
+      <p>The first thing we can do is check that the agent sees the App Functions. You can enter parameters and get back the exact results the function returns (no AI involvement yet) and execute functions that update the data.</p>
+<p><img alt="agent_debug" src="assets/agent_debug.gif"></p>
+<p>Now we know it can see our app and the available App Functions, let&#39;s hook it up to Gemini!</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Get a Gemini API Key to Test with Gemini" duration="2">
+      <p>To give our Testing Agent a brain, we need a Gemini API key. We will be using the free tier so no need to add a credit card or sign up to a pro plan.</p>
+<ol>
+<li>Go to <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</li>
+<li>Sign in with your Google account.</li>
+<li>Click the <strong>Get API key</strong> button in the left-hand menu.</li>
+</ol>
+<p><img alt="ai_studio_annotated_1" src="assets/ai_studio_annotated_1.png"></p>
+<ol start="4">
+<li>Click <strong>Create API key</strong></li>
+</ol>
+<p><img alt="ai_studio_annotated_2" src="assets/ai_studio_annotated_2.png"></p>
+<ol start="5">
+<li>Click <strong>Create project</strong> in the <strong>Choose an imported project</strong> dropdown</li>
+</ol>
+<p><img alt="ai_studio_annotated_3" src="assets/ai_studio_annotated_3.png"></p>
+<ol start="6">
+<li>Enter the project name and click <strong>Create project</strong></li>
+</ol>
+<p><img alt="ai_studio_annotated_4" src="assets/ai_studio_annotated_4.png"></p>
+<ol start="7">
+<li>Click <strong>Create key</strong></li>
+</ol>
+<p><img alt="ai_studio_annotated_5" src="assets/ai_studio_annotated_5.png"></p>
+<ol start="8">
+<li>Copy the generated key using the copy icon or the <strong>Copy key</strong> button</li>
+</ol>
+<p><img alt="ai_studio_annotated_6" src="assets/ai_studio_annotated_6.png"></p>
+<ol start="9">
+<li>If you missed copying it, you can now find it in the list of keys in <a href="https://aistudio.google.com/app/apikey" target="_blank">AI Studio</a></li>
+</ol>
+<p><img alt="ai_studio_annotated_7" src="assets/ai_studio_annotated_7.png"></p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Test it Live!" duration="5">
+      <p>This is where the magic happens. We are going to ask the agent a natural language question and watch it trigger our app&#39;s specific function.</p>
+<ol>
+<li>Open the <strong>AppFunctions Testing Agent</strong> app on your Android device/emulator.</li>
+<li>Navigate to the <strong>Settings</strong> screen. Paste your Gemini API key (copied from the previous step) into the settings/configuration screen of the agent.</li>
+</ol>
+<p><img alt="api_key" src="assets/api_key.gif"></p>
+<ol start="3">
+<li>Navigate to the <strong>Agent Demo</strong>, type a natural language prompt that targets the function we wrote. For example:<em>&quot;I have 4 friends coming over for 2 hours and we love strategy games. What should we play?&quot;</em></li>
+<li>Press <strong>send</strong>.</li>
+</ol>
+<p><img alt="agent_demo_edited" src="assets/agent_demo_edited.gif"><em>Some sequences may be shortened!</em></p>
+<p>You will see the agent process the prompt (note - it may take a bit longer than my video!), discover our <code>queryGames</code> App Function, map &quot;4 friends&quot; and &quot;2 hours&quot; to our function&#39;s parameters, and instantly surface the correct game from our database!</p>
+<p>If we think back to our KDoc prompt:</p>
+<div class="code-container"><pre><code class=" language-kotlin">/**  
+ * Query what game to play based on duration, number of players, and age. 
+ *  
+ * @param maxDurationMinutes The maximum duration in minutes for the game.  
+ * @param numPlayers The number of players.  
+ * @param minAge The minimum age of the players.  
+ * @return A list of games matching the criteria.  
+ */
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>We did not ask for the agent to go grab any extra information, but it did include the description about the games from the internet to make it more engaging!</p>
+<p><strong>Something for you to try:</strong> Now ask Gemini to add a play then go and check to see if it has worked in the app.</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Wrapping Up" duration="1">
+      <p>This perfectly highlights the magic of agentic AI. Our app did the heavy lifting of querying the local database for the exact constraints. But Gemini took over the presentation layer. It seamlessly combined our app&#39;s strictly structured local data with its own vast world knowledge to create a conversational, engaging response for the user, entirely for free.</p>
+<p>Think about what this means for us as developers! In a traditional app, if we wanted to show a dynamic summary or thematic description of the game, we’d have to build another API call, design a new UI layout, and wire it all up to tie it all together. With App Functions, we just hand the raw data back to the agent, and it handles the formatting and contextual enrichment automatically. We get to focus on our app&#39;s core logic, and the AI handles the rest.</p>
+<p>It does show exactly why your KDocs are so critical. We didn&#39;t explicitly tell the agent to go search the web for descriptions, but because our <code>@AppFunction</code> parameters and return types were clearly documented—and we set <code>isDescribedByKDoc = true</code>—the LLM understood exactly what kind of entity it was holding. It then intuitively knew that adding a thematic description would best answer the user&#39;s implicit intent. The better your comments, the smarter the agent behaves!</p>
+<p>While the App Functions API is still in private preview, there is absolutely nothing stopping you from preparing your app right now. By annotating your key features today, testing them locally with ADB, and refining those KDocs, you&#39;ll be lightyears ahead when the API opens up to the public. If you&#39;re looking for a shortcut, try the dedicated AppFunctions agent skill in the Android skills repository to automatically generate the required Kotlin code and metadata configurations. Take a look at your app&#39;s core workflows, pick one that users would love to trigger with their voice, and start building!</p>
+<p>Your app is about to get a whole lot smarter!</p>
+
+    </google-codelab-step>
+  </google-codelab>
+
+  <script src="https://distribute.kartikarora.me/js/native-shim.js"></script>
+  <script src="https://distribute.kartikarora.me/js/custom-elements.min.js"></script>
+  <script src="https://distribute.kartikarora.me/js/prettify.js"></script>
+  <script src="https://distribute.kartikarora.me/js/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

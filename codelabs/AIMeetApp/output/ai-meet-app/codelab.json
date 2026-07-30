@@ -1,0 +1,19 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "../../",
+  "mainga": "",
+  "updated": "2026-08-03T10:18:14.291Z",
+  "id": "ai-meet-app",
+  "duration": 50,
+  "title": "AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions",
+  "summary": "Level up your development skills! In this hands-on workshop, we’ll take a pre-built board game app and supercharge it using Gemini. You’ll write the specific App Functions that allow Gemini to scan a user’s natural language prompt (e.g., “I have 4 friends, 2 hours, and I love strategy”) and instantly surface the perfect game from the app’s database. No loaded dice here—just pure, fast-paced AI integration.",
+  "source": "ai-meet-app.md",
+  "theme": "",
+  "status": ["Published"],
+  "category": ["Android", "App Functions", "AI", "Kotlin", "Gemini"],
+  "tags": ["tutorial", "beginner"],
+  "feedback": "",
+  "image": "assets/adb_devices.png",
+  "url": "ai-meet-app"
+}
