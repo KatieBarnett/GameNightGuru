@@ -7,6 +7,7 @@
   <title>AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="icon" href="https://katiebarnett.dev/codelabs/favicon_codelab/favicon_codelab.ico">
   <link rel="stylesheet" href="https://distribute.kartikarora.me/css/codelab-elements.css">
   <style>
     .success {
@@ -97,32 +98,35 @@
       }, 2000);
     }
   </script>
-  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab-analytics gaid="G-F4ZF2ENF4C"></google-codelab-analytics>
   <google-codelab codelab-gaid=""
                   id="ai-meet-app"
                   title="AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions"
                   environment="Web"
                   feedback-link="">
     <google-codelab-step label="Download and Install Android Studio" duration="0">
-      <p>If you haven&#39;t yet, download and install Android Studio. It is best to have the latest stable version from the <a href="https://developer.android.com/studio/?gclid=Cj0KCQiAjJOQBhCkARIsAEKMtO3zEhdK4_I0CEZic3UH4dl-9gVXuHFR9dCl3TOHKjmv3xWLU3UxfhYaApfAEALw_wcB&amp;gclsrc=aw.ds&amp;authuser=894489108" target="_blank">Android Studio download page</a>.</p>
+      <p>If you haven&#39;t yet, download and install Android Studio. It is best to have the latest stable version from the <a href="https://developer.android.com/studio" target="_blank">Android Studio download page</a></p>
 <p>For more detailed instructions, follow the <a href="https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio#0" target="_blank">Download and install Android Studio codelab</a>.</p>
 
     </google-codelab-step>
     <google-codelab-step label="Create an Android Emulator" duration="1">
-      <p>It can take a while for the emulator image to download, so while you are waiting, create a new emulator.</p>
+      <aside class="special"><p><strong>Note:</strong> If you decide to use a physical device and connect it to your computer with a cable you can skip this step!</p></aside>
+<p>It can take a while for the emulator image to download, so while you are waiting, create a new emulator.</p>
+<aside class="special"><p><strong>Note:</strong> For this codelab, you will need to use a System Image of <strong>36.0</strong> (codename Baklava) and above.</p><p>Usually I use a <strong>Medium Phone</strong> but any other one you have should be fine.</p></aside>
 <p>For more detailed instructions, follow the <a href="https://developer.android.com/codelabs/basic-android-kotlin-compose-emulator#2" target="_blank">Run your first app on the Android Emulator codelab - Step 3</a>.</p>
 
     </google-codelab-step>
     <google-codelab-step label="Introducing Game Night Guru" duration="3">
       <p>The demo app for this codelab is <strong>Game Night Guru</strong>, a boardgame collection manager and play tracker. It helps hobbyists keep track of the games they own and log their gaming sessions.</p>
-<p><a href="https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip" target="_blank">Download Source Code</a></p>
-<p>You can also clone it from github:</p>
+<paper-button class="colored" raised><a href="https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip">Download Source Code</a></paper-button>
+<p>You can also clone it from <a href="https://github.com/android/appfunctions" target="_blank">github</a>:</p>
 <ul>
-<li>Clone the the official App Functions repository using your terminal:git clone https://github.com/android/appfunctions.git
-</li>
-<li>Clone the official App Functions repository using your favourite source control application using:git@github.com:android/appfunctions.git
-</li>
+<li><p>Clone the official App Functions repository using your terminal:</p><div class="code-container"><pre><code class=" language-bash">git clone https://github.com/android/appfunctions.git
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div></li>
+<li><p>Clone the official App Functions repository using your favourite source control application using:</p><div class="code-container"><pre><code class=" language-bash">git@github.com:android/appfunctions.git
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div></li>
 </ul>
+<p>Here is what the app looks like:</p>
 <table>
 <thead>
 <tr>
@@ -135,80 +139,330 @@
 </tr>
 </tbody>
 </table>
+<p><em>For demonstration purposes, a list of games has been added (exported from </em><a href="https://boardgamegeek.com/" target="_blank">Boardgame Geek</a><em> ), if you want to replace them check out the </em><a href="https://github.com/KatieBarnett/GameNightGuru/blob/main/README.md" target="_blank">README</a><em>.</em></p>
 <h3>Core Features</h3>
 <ul>
-<li><strong>Game Collection Management:</strong> Browse a comprehensive list of board games in the library.</li>
-<li><strong>Detailed Insights:</strong> View specific details for each game, including player counts, recommended ages, and average playtime.</li>
-<li><strong>Play Tracking:</strong> Log gaming sessions, recording how many people played, how long it took, and how you&#39;d rate the experience.</li>
+<li><p><strong>Game Collection Management:</strong> Browse a comprehensive list of board games in the library.</p></li>
+<li><p><strong>Detailed Insights:</strong> View specific details for each game, including player counts, recommended ages, and average playtime.</p></li>
+<li><p><strong>Play Tracking:</strong> Log gaming sessions, recording how many people played, how long it took, and how you&#39;d rate the experience.</p></li>
 </ul>
 <h3>App Walkthrough</h3>
-<h4>1. The Game List</h4>
+<p><strong>1. The Game List</strong></p>
 <p>The main screen of the app displays the board game collection. Each entry provides a quick glance at the game&#39;s title and its player count range.</p>
 <ul>
-<li><strong>Navigation:</strong> Tapping on any game in the list will take you to its details.</li>
+<li><p>Navigation: Tapping on any game in the list will take you to its details.</p></li>
 </ul>
-<h4>2. Game Details</h4>
+<p><strong>2. Game Details</strong></p>
 <p>The detail screen provides a deeper dive into a specific game. Here you can see:</p>
 <ul>
-<li><strong>Metadata:</strong> Playing time, player counts, and age recommendations.</li>
-<li><strong>Play History:</strong> A history of your logged sessions for this specific game.</li>
-<li><strong>Actions:</strong> A button to log a new play session.</li>
+<li><p>Metadata: Playing time, player counts, and age recommendations.</p></li>
+<li><p>Play History: A history of your logged sessions for this specific game.</p></li>
+<li><p>Actions: A button to log a new play session.</p></li>
 </ul>
-<h4>3. Logging a Play</h4>
+<p><strong>3. Logging a Play</strong></p>
 <p>From the Game Detail screen, you can open the <strong>Add Play</strong> dialog. This allows you to enter:</p>
 <ul>
-<li>The number of players for that specific session.</li>
-<li>The actual duration of the game.</li>
-<li>A rating (1-10) for the session.</li>
+<li><p>The number of players for that specific session.</p></li>
+<li><p>The actual duration of the game.</p></li>
+<li><p>A rating (1-10) for the session.</p></li>
 </ul>
 <h3>Technical Stack</h3>
 <p>The app is built using modern Android development practices:</p>
 <ul>
-<li><strong>Language:</strong> Kotlin</li>
-<li><strong>UI Framework:</strong> Jetpack Compose for a fully declarative UI.</li>
-<li><strong>Navigation:</strong> Jetpack Navigation 3.</li>
-<li><strong>Database:</strong> Room for local persistence of games and play records.</li>
-<li><strong>Dependency Injection:</strong> Hilt for managing app components.</li>
+<li><p><strong>Language:</strong> Kotlin</p></li>
+<li><p><strong>UI Framework:</strong> Jetpack Compose for a fully declarative UI.</p></li>
+<li><p><strong>Navigation:</strong> Jetpack Navigation 3.</p></li>
+<li><p><strong>Database:</strong> Room for local persistence of games and play records.</p></li>
+<li><p><strong>Dependency Injection:</strong> Hilt for managing app components.</p></li>
 </ul>
 <h3>Project Structure</h3>
 <ul>
-<li><code>data/database</code>: Room entity, DAO, and Database definition.</li>
-<li><code>data/repository</code>: Data source abstraction.</li>
-<li><code>data/importer</code>: Logic for parsing the CSV file.</li>
-<li><code>ui/list</code>: Screen and ViewModel for displaying the game list.</li>
-<li><code>ui/detail</code>: Screen and ViewModel for displaying the game detail (play log) &amp; add play dialog.</li>
-<li><code>ui/components</code>: Reusable UI components.</li>
-<li><code>di</code>: Hilt modules for dependency injection.</li>
+<li><p><code>data/database</code>: Room entity, DAO, and Database definition.</p></li>
+<li><p><code>data/repository</code>: Data source abstraction.</p></li>
+<li><p><code>data/importer</code>: Logic for parsing the CSV file.</p></li>
+<li><p><code>ui/list</code>: Screen and ViewModel for displaying the game list.</p></li>
+<li><p><code>ui/detail</code>: Screen and ViewModel for displaying the game detail (play log) &amp; add play dialog.</p></li>
+<li><p><code>ui/components</code>: Reusable UI components.</p></li>
+<li><p><code>di</code>: Hilt modules for dependency injection.</p></li>
 </ul>
 
     </google-codelab-step>
-    <google-codelab-step label="Preparing for App Functions [TODO]" duration="5">
-      
-    </google-codelab-step>
-    <google-codelab-step label="Writing our first App Function [TODO]" duration="10">
-      <p>Content for step 2...</p>
+    <google-codelab-step label="Preparing for App Functions" duration="5">
+      <p>First thing to do, is add the dependencies to the <code>app</code> <code>build.gradle.kts</code> with the version <code>1.0.0-alpha10</code> or later.</p>
+<div class="code-container"><pre><code class=" language-kotlin">dependencies {
+  implementation(&quot;androidx.appfunctions:appfunctions:1.0.0-alpha10&quot;)
+  ksp(&quot;androidx.appfunctions:appfunctions-compiler:1.0.0-alpha10&quot;)
+}
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<aside class="special"><p><strong>Note:</strong> You can also add them to the version catalog <code>libs.versions.toml</code> like the other dependencies in this project if you want.</p></aside>
+<p>Sync your project by clicking <strong>Sync now</strong> in the Gradle change notification bar once you have added these dependencies.</p>
+<p><img alt="sync_now" src="assets/sync_now.png"></p>
 
     </google-codelab-step>
-    <google-codelab-step label="Create an App Function using a Gemini Skill [TODO]" duration="10">
-      
+    <google-codelab-step label="Writing our first App Function" duration="10">
+      <p>We are going to add an App Function <code>queryGames</code> that will query our list of games in the database and return a game based on the information the user requests.</p>
+<p>We&#39;ll allow the user to specify some or all of these parameters to select a game:</p>
+<ul>
+<li><p>the maximum time the game should take (<code>maxDurationMinutes</code>)</p></li>
+<li><p>the number of players available to play the game (<code>numPlayers</code>)</p></li>
+<li><p>the minimum age of the players (<code>minAge</code>)</p></li>
+</ul>
+<p>And we want the function to return a list of games matching this criteria.</p>
+<p>To make it easier to use the <code>GameRepository</code> within the App Functions, I have added a shell that does the dependency injection for you in <code>GameAppFunctions.kt</code>.</p>
+<p>Once your project is synced, open up the <code>GameAppFunctions.kt</code> file and uncomment all the code:</p>
+<div class="code-container"><pre><code class=" language-kotlin">@RequiresApi(Build.VERSION_CODES.BAKLAVA)  
+abstract class GameAppFunctions : AppFunctionService() {  
+  
+    private lateinit var gameRepository: GameRepository  
+  
+    override fun onCreate() {  
+        super.onCreate()  
+        val entryPoint = EntryPointAccessors.fromApplication(  
+            applicationContext,  
+            GameAppFunctionsEntryPoint::class.java  
+        )  
+        gameRepository = entryPoint.gameRepository()  
+    }  
+  
+    @EntryPoint  
+    @InstallIn(SingletonComponent::class)  
+    interface GameAppFunctionsEntryPoint {  
+        fun gameRepository(): GameRepository  
+    }  
+  
+    // Add your App Functions here  
+  
+}  
+  
+// Add the GameSummary data class here
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<aside class="special"><p><strong>Note:</strong> There are also imports at the top of the file, make sure to uncomment those as well, I have not included them above to make it easier to read</p></aside>
+<blockquote><p>What is <code>@RequiresApi(Build.VERSION_CODES.BAKLAVA)</code>? This is indicating that this code will only work with API 36 and above (codenamed Baklava). It will be ignored on devices with lower APIs.</p></blockquote>
+<p>Let&#39;s create the <code>queryGames</code> function.</p>
+<h3>App Function Anatomy</h3>
+<p>We need five pieces to make our App Function work:</p>
+<p><strong>1. </strong><a href="https://kotlinlang.org/docs/kotlin-doc.html" target="_blank">KDoc</a><strong> comments to describe what the function does, including descriptions of the inputs and output</strong></p>
+<div class="code-container"><pre><code class=" language-kotlin">/**
+ * Query what game to play based on duration, number of players, and age.
+ *
+ * @param maxDurationMinutes The maximum duration in minutes for the game.
+ * @param numPlayers The number of players.
+ * @param minAge The minimum age of the players.
+ * @return A list of games matching the criteria.
+ */
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p><strong>2. The </strong><strong><code>@AppFunction</code></strong><strong> annotation:</strong></p>
+<div class="code-container"><pre><code class=" language-kotlin">@AppFunction(isDescribedByKDoc = true)
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>By setting  <code>isDescribedByKDoc = true</code>, you&#39;re bridging the gap between human-readable comments and machine-readable metadata. It bundles the Kotlin documentation into the function&#39;s metadata, giving the AI agent the context it needs to successfully trigger the code. Without this the AI will need to guess at what the function does.</p>
+<p><strong>3. The inputs to the function:</strong></p>
+<div class="code-container"><pre><code class=" language-kotlin">maxDurationMinutes: Int? = null,
+numPlayers: Int? = null,
+minAge: Int? = null
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>By setting all these as nullable we can allow the AI to provide one or more based on what the user asks from the AI.</p>
+<p><strong>4. The function code that actually performs the action</strong></p>
+<p>We can get a list of games from our <code>GameRespository</code> using:</p>
+<div class="code-container"><pre><code class=" language-kotlin">val allGames = gameRepository.getAllGames().first()
+	allGames.filter { game -&gt;
+		val durationMatch = maxDurationMinutes == null || game.maxPlayTime &lt;= maxDurationMinutes
+		val playersMatch = numPlayers == null || (numPlayers &gt;= game.minPlayers &amp;&amp; numPlayers &lt;= game.maxPlayers)
+		val ageMatch = minAge == null || extractMinAge(game.bggRecAgeRange) &lt;= minAge
+		durationMatch &amp;&amp; playersMatch &amp;&amp; ageMatch
+	}
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>With a helper function of:</p>
+<div class="code-container"><pre><code class=" language-kotlin">private fun extractMinAge(ageRange: String): Int {  
+    return ageRange.filter { it.isDigit() }.toIntOrNull() ?: 0  
+}
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>Because this data fetching could take a while, we need to make sure that we declare the function as a <code>suspend</code> function.</p>
+<aside class="special"><p><strong>Note:</strong> If you have a lot of processing to do, it can be a good idea to switch to suitable coroutine dispatcher so the UI thread is not blocked. We don&#39;t need to worry about it here as <code>getAllGames</code>in <code>GameRepository</code> already use the <code>IO</code> dispatcher as part of the database integration.</p></aside>
+<p><strong>5. The output object</strong></p>
+<p>So that the AI can receive and understand the output, we need to create a serialised class with all the information that the AI needs:</p>
+<div class="code-container"><pre><code class=" language-kotlin">/**  
+ * A summary of a game. 
+ */
+@AppFunctionSerializable(isDescribedByKDoc = true)  
+data class GameSummary(  
+    /** The unique identifier of the game */  
+    val id: Long,  
+    /** The name of the game */  
+    val name: String,  
+    /** The minimum number of players */  
+    val minPlayers: Int,  
+    /** The maximum number of players */  
+    val maxPlayers: Int,  
+    /** The average playing time in minutes */  
+    val playingTime: Int  
+)
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>Again, we can make sure the AI knows what all these parameters are using the annotation <code>@AppFunctionSerializable</code> with <code>isDescribedByKDoc = true</code>.</p>
+<h3>Putting this all together into our `queryGames` function:</h3>
+<div class="code-container"><pre><code class=" language-kotlin">/**
+ * Query what game to play based on duration, number of players, and age.
+ *
+ * @param maxDurationMinutes The maximum duration in minutes for the game.
+ * @param numPlayers The number of players.
+ * @param minAge The minimum age of the players.
+ * @return A list of games matching the criteria.
+ */
+@AppFunction(isDescribedByKDoc = true)
+suspend fun queryGames(
+	maxDurationMinutes: Int? = null,
+	numPlayers: Int? = null,
+	minAge: Int? = null
+): List&lt;GameSummary&gt; = withContext(Dispatchers.IO) {
+	val allGames = gameRepository.getAllGames().first()
+	allGames.filter { game -&gt;
+		val durationMatch = maxDurationMinutes == null || game.maxPlayTime &lt;= maxDurationMinutes
+		val playersMatch = numPlayers == null || (numPlayers &gt;= game.minPlayers &amp;&amp; numPlayers &lt;= game.maxPlayers)
+		val ageMatch = minAge == null || extractMinAge(game.bggRecAgeRange) &lt;= minAge
+		durationMatch &amp;&amp; playersMatch &amp;&amp; ageMatch
+	}.map { game -&gt;
+		GameSummary(
+			id = game.objectId,
+			name = game.objectName,
+			minPlayers = game.minPlayers,
+			maxPlayers = game.maxPlayers,
+			playingTime = game.playingTime
+		)
+	}
+}
+
+private fun extractMinAge(ageRange: String): Int {  
+    return ageRange.filter { it.isDigit() }.toIntOrNull() ?: 0  
+}
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>Update <code>GameAppFunctions.kt</code> to include the <code>queryGames</code> function and the <code>GameSummary</code> class definition at the marked places.</p>
+<p>You may need to add these imports at the top of the file:</p>
+<div class="code-container"><pre><code class=" language-kotlin">import androidx.appfunctions.AppFunction  
+import androidx.appfunctions.AppFunctionSerializable  
+import androidx.appfunctions.AppFunctionServiceEntryPoint  
+import kotlinx.coroutines.Dispatchers  
+import kotlinx.coroutines.flow.first  
+import kotlinx.coroutines.withContext
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<h3>Declare the AppFunction service in the manifest</h3>
+<p>So we now need to let the agents on the device know that the <code>queryGames</code> App Function exists. For this, we need to declare the service in the manifest.</p>
+<p><strong>Here is what’s happening behind the scenes:</strong> when you build your app, a background tool (the KSP compiler) looks at the abstract class we just wrote and automatically generates the actual, working code for the <code>GameAppFunctionsService</code>. It also creates an XML file in the <code>assets/</code> folder that lists all the App Functions.</p>
+<p>Add the following to   <code>AndroidManifest.xml</code> :</p>
+<div class="code-container"><pre><code class=" language-xml">&lt;service  
+    android:name=&quot;.GameAppFunctionsService&quot;  
+    android:permission=&quot;android.permission.BIND_APP_FUNCTION_SERVICE&quot;  
+    android:exported=&quot;true&quot;  
+    tools:targetApi=&quot;36&quot;&gt;  
+    &lt;intent-filter&gt;        
+	    &lt;action android:name=&quot;android.app.appfunctions.AppFunctionService&quot; /&gt;  
+    &lt;/intent-filter&gt;    
+	&lt;property android:name=&quot;android.app.appfunctions.v2&quot;  
+        android:value=&quot;game_app_functions.xml&quot; /&gt;  
+&lt;/service&gt;
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>Build and run the app on your device.</p>
+
+    </google-codelab-step>
+    <google-codelab-step label="Create an App Function using a Gemini Skill" duration="10">
+      <p>We&#39;ve now created a simple function ourselves, but we also want one that can add a play record right from the AI agent. And since we are now living in an AI world, can we do this using AI? Of course we can!</p>
+<p>Handily, Google have created an <a href="https://github.com/android/skills/tree/main/device-ai/appfunctions" target="_blank">App Functions AI Skill</a> that will help us create the next function.</p>
+<h3>Install the Android CLI</h3>
+<p>To use these specialised AI skills, we first need the <a href="https://developer.android.com/tools/agents/android-cli" target="_blank">Android CLI</a> tool. This tool allows you to manage AI skills and interact with Gemini more deeply.</p>
+<p>Open your terminal (or the <strong>Terminal</strong> tab in Android Studio - If you can&#39;t find it, you can open it via <strong>Tools &gt; Tool Windows &gt; Terminal</strong>) and run the command for your operating system:</p>
+<p><strong>For macOS (Apple Silicon):</strong></p>
+<div class="code-container"><pre><code class=" language-bash">curl -fsSL https://dl.google.com/android/cli/latest/darwin_arm64/install.sh | bash
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p><strong>For macOS (Intel):</strong></p>
+<div class="code-container"><pre><code class=" language-bash">curl -fsSL https://dl.google.com/android/cli/latest/darwin_x86_64/install.sh | bash
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p><strong>For Windows:</strong>Open PowerShell as an Administrator and run:</p>
+<div class="code-container"><pre><code class=" language-powershell">curl -fsSL https://dl.google.com/android/cli/latest/windows_x86_64/install.cmd -o &quot;$env:TEMP\i.cmd&quot;; &amp; &quot;$env:TEMP\i.cmd&quot;
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<aside class="special"><p><strong>Note:</strong> After installation, you may need to restart your terminal or Android Studio for the <code>android</code> command to be recognised.</p></aside>
+<p><img alt="android_cli_install" src="assets/android_cli_install.png"></p>
+<h3>Add the App Functions Skill</h3>
+<p>Now that you have the CLI, let&#39;s &quot;teach&quot; Gemini how to handle App Functions by adding the skill.</p>
+<p>Run this command in your terminal:</p>
+<div class="code-container"><pre><code class=" language-bash">android skills add appfunctions
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>This downloads the metadata and instructions that Gemini needs to understand how to write and optimise App Functions for you and will add it to the directory for all AI agents that you have installed.</p>
+<p>If you don&#39;t have any existing agent directories and don&#39;t specify particular agents, the skills will be installed for Gemini and Antigravity at <code>~/.gemini/antigravity/skills</code>.</p>
+<figure>
+<img alt="android_skill_install" src="assets/android_skill_install.png">
+<figcaption><em>As you can see, I am trying out all of the agents!</em></figcaption>
+</figure>
+<p>There are a whole bunch of Android Skills available for use, you can check them out <a href="https://developer.android.com/tools/agents/android-skills" target="_blank">here</a>.</p>
+<h3>Set up Gemini in Android Studio</h3>
+<p>If you haven&#39;t used Gemini in Android Studio yet, follow these steps to get started on the <strong>Free Tier</strong> (no AI credits or credit card required):</p>
+<ol>
+<li><p><strong>Sign In:</strong> Click the <strong>Profile icon</strong> (top right of Android Studio) and sign in with your Google account.</p></li>
+<li><p><strong>Open Gemini:</strong> Go to <strong>View &gt; Tool Windows &gt; Gemini</strong>. Or press on the Agent icon on the right.</p></li>
+<li><p><strong>Onboard:</strong> Accept the terms of service. When prompted for a plan, the <strong>Free Tier (Gemini Flash)</strong> is perfectly sufficient for this codelab.</p></li>
+</ol>
+<p><img alt="gemini_agent" src="assets/gemini_agent.png"></p>
+<h3>Prompt Gemini to create a new App Function: `addPlay`</h3>
+<p>Now let&#39;s put the skill to work. We&#39;ll ask Gemini to implement the <code>addPlay</code> function for us.</p>
+<p>In the Gemini chat box, enter the following prompt:</p>
+<blockquote><p>I need to add a new function to <code>GameAppFunctions.kt</code> called <code>addPlay</code>. Use the <strong>App Functions skill</strong> to implement it.</p><p>The function should:</p><ol>
+<li><p>Take <code>gameId</code> (Long), <code>numPlayers</code> (Int), <code>playTimeMinutes</code> (Int), and <code>rating</code> (Float).</p></li>
+<li><p>Use <code>gameRepository.getGameById(gameId)</code> to check if the game exists.</p></li>
+<li><p>Create a <code>PlayEntity</code> and save it using <code>gameRepository.insertPlay(play)</code>.</p></li>
+<li><p>Return a <code>PlayRecord</code> summary.</p></li>
+<li><p>Include the <code>@AppFunction</code> annotation and full KDocs.&quot;</p></li>
+</ol></blockquote>
+<p>I have deliberately made this prompt very specific so that the output is what we want, but feel free to play around with it and see what results you get!</p>
+<p><img alt="app_functions_with_skill" src="assets/app_functions_with_skill.gif"></p>
+<h3>Review and Apply</h3>
+<p>Gemini will generate the code block.</p>
+<ol>
+<li><p>Review the generated code in the Gemini window. It should use the <code>gameRepository</code>.</p></li>
+<li><p>Click the <strong>Keep</strong> button to keep the code in <code>GameAppFunctions.kt</code>. If you don&#39;t like it, you can click <strong>Revert</strong> and it will be removed and you can try prompting again.</p></li>
+</ol>
+<p><img alt="keep_changes" src="assets/keep_changes.png"></p>
+<ol start="3">
+<li><p>If any imports are missing (appearing in red), click on them and press <code>Alt+Enter</code> (Windows) or <code>Option+Enter</code> (Mac) to add them.</p></li>
+</ol>
+<p><img alt="add_import" src="assets/add_import.png"></p>
+<aside class="special"><p><strong>Important:</strong> Ensure Gemini also generates a <code>PlayRecord</code> data class at the bottom of the file. It must be annotated with <code>@AppFunctionSerializable(isDescribedByKDoc = true)</code> for the AI agent to understand the output (just like we had with <code>GameSummary</code>!</p></aside>
+<div class="code-container"><pre><code class=" language-kotlin">/**  
+ * A summary of a logged play. 
+ */
+@AppFunctionSerializable(isDescribedByKDoc = true)  
+data class PlayRecord(  
+    /** The name of the game played */  
+    val gameName: String,  
+    /** The date the game was played, as a timestamp in milliseconds */  
+    val date: Long,  
+    /** The number of players */  
+    val numPlayers: Int,  
+    /** The play time in minutes */  
+    val playTimeMinutes: Int,  
+    /** The rating given to the play */  
+    val rating: Float  
+)
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
+<p>Your <code>addPlay</code> function should now be ready to use, of course, because this is Generative AI, it may look a bit different to the sample code, but should hopefully function the same.</p>
+<p>In the next step, we&#39;ll build the app and test it with a real AI agent!</p>
+
     </google-codelab-step>
     <google-codelab-step label="Testing Your App Functions" duration="2">
       <p>Now that we have some App Functions for Game Night Guru, it’s time to see them in action. We are going to test the plumbing to make sure the Android system sees our functions using ADB from the command line, and then use a testing agent to watch Gemini interact with our app.</p>
 <p>Make sure you have created an emulator (see step <strong>Create an Android Emulator</strong>) or connect a physical Android device via a cable and installed Game Night Guru onto the device.</p>
 <h3>Enable Developer Options</h3>
-<p>Before we can use ADB, we need to enable Developer Options on your physical device.</p>
+<p>Before we can use ADB, we need to enable USB debugging (both for emulators and physical devices). To do this, we need to enable Developer Options.</p>
 <ol>
-<li>Open your device <strong>Settings</strong>.</li>
-<li>Scroll down and tap <strong>About phone</strong>.<em>(Note: On Samsung devices, you will then need to tap </em><em><strong>Software information</strong></em><em>).</em></li>
-<li>Find the <strong>Build number</strong> and tap it <strong>7 times</strong> quickly.</li>
-<li>You will see a small message saying &quot;You are now a developer!&quot;.</li>
-<li>Go back to the main Settings menu, and you will now see <strong>Developer options</strong> listed at the bottom.</li>
+<li><p>Open your device <strong>Settings</strong>.</p></li>
+<li><p>Scroll down and tap <strong>About phone</strong>.<em>(Note: On Samsung devices, you will then need to tap </em><em><strong>Software information</strong></em><em>).</em></p></li>
+<li><p>Find the <strong>Build number</strong> and tap it <strong>7 times</strong> quickly.</p></li>
+<li><p>You will see a small message saying &quot;You are now a developer!&quot;.</p></li>
+<li><p>Go back to the main Settings menu, and you will now see <strong>Developer options</strong> listed at the bottom.</p></li>
 </ol>
-<p><a href="https://youtu.be/_tUGcSy3uBk" target="_blank">![Watch how to enable Developer Options](https://img.youtube.com/vi/_tUGcSy3uBk/0.jpg)</a></p>
+<iframe class="youtube-video" src="https://www.youtube.com/embed/_tUGcSy3uBk" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>If you can&#39;t see the <code>Build Number</code> option, check <a href="https://developer.android.com/studio/debug/dev-options#enable" target="_blank">here</a> for exact menu path for most manufacturers.</p>
 
     </google-codelab-step>
     <google-codelab-step label="Install ADB (Android Debug Bridge)" duration="2">
       <p><a href="https://developer.android.com/tools/adb" target="_blank">ADB</a> is the command-line tool that lets your computer talk to your Android device or emulator. Because we are using Android Studio for this codelab, you likely already have it installed! We just need to make sure you can run it from your terminal.</p>
+<aside class="special"><p>You can either use any terminal application on your device, or you can use the terminal within Android Studio. If you can&#39;t find it, you can open it via<strong>Tools &gt; Tool Windows &gt; Terminal</strong></p></aside>
 <p>To check that you have it installed, open your terminal and run:</p>
 <div class="code-container"><pre><code class=" language-bash">adb
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
@@ -239,6 +493,7 @@ Running on Darwin 25.5.0 (arm64)
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
 <p>If you see a device listed, you are ready to go!</p>
 <p><img alt="adb_devices" src="assets/adb_devices.png"></p>
+<aside class="warning"><p><strong>Warning:</strong> If you have two devices listed, then you will run into some issues later where you have to specify which device to run the commands on. I recommend disconnecting one so you only have one device listed - it is much easier!</p></aside>
 
     </google-codelab-step>
     <google-codelab-step label="Test App Functions Integration via ADB" duration="2">
@@ -249,41 +504,44 @@ Running on Darwin 25.5.0 (arm64)
 <p>Because that list can get long, you can filter it specifically for Game Night Guru using <code>grep</code>:</p>
 <div class="code-container"><pre><code class=" language-bash">adb shell cmd app_function list-app-functions | grep -A 20 dev.katiebarnett.gamenightguru
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
-<p>If you see the functions we wrote (like <code>queryGames</code>), everything is working and Game Night Guru is exposing its capabilities to the OS!<img alt="app_functions_json" src="assets/app_functions_json.png"></p>
+<aside class="special"><p><strong>Note:</strong> Make sure to replace the package name if you have updated it to your own name</p><p>You can also modify the number after <code>-A</code> in the <code>grep</code> command (the_ <code>--after-context</code> flag) to see more or less of the function definition.</p></aside>
+<p>If you see the functions we wrote (like <code>queryGames</code>), everything is working and Game Night Guru is exposing its capabilities to the OS!</p>
+<p><img alt="app_functions_json" src="assets/app_functions_json.png"></p>
 <h3>Something fun to explore</h3>
 <p>If you don&#39;t include the grep command (delete the  <code>| grep -A 20 dev.katiebarnett.gamenightguru</code> part) , what other app functions do you see on this device? Perhaps try it when you have your actual phone connected. Are any of your favourite apps already using App Functions?</p>
+<p><em>Be aware  -  if you are writing your own App Functions, anyone else with a device connected to </em><em><code>adb</code></em><em> or an app that acts as an agent can see all your function definitions/schemas, so don’t include language or proprietary information that you don’t want others to see!</em></p>
 
     </google-codelab-step>
     <google-codelab-step label="Download &amp; Install the Testing Agent" duration="5">
       <p>Google provides a privileged Testing Agent app that acts as a stand-in for Gemini. This allows us to test end-to-end workflows without needing a full production system.</p>
 <ol>
-<li>To use the testing agent, you need to enable Developer Options on your emulator or device</li>
-<li>To get the Testing Agent app you can do one of the following:</li>
+<li><p>To use the testing agent, you need to enable Developer Options on your emulator or device</p></li>
+<li><p>To get the Testing Agent app you can do one of the following:</p></li>
 </ol>
-<p><a href="https://github.com/android/appfunctions/archive/refs/heads/main.zip" target="_blank">Download Source Code</a></p>
+<paper-button class="colored" raised><a href="https://github.com/android/appfunctions/archive/refs/heads/main.zip">Download Source Code</a></paper-button>
 <ul>
-<li>Clone the the official App Functions repository using your terminal:git clone https://github.com/android/appfunctions.git
-</li>
-<li>Clone the official App Functions repository using your favourite source control application using:git@github.com:android/appfunctions.git
-</li>
+<li><p>Clone the official App Functions repository using your terminal:</p><div class="code-container"><pre><code class=" language-bash">git clone https://github.com/android/appfunctions.git
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div></li>
+<li><p>Clone the official App Functions repository using your favourite source control application using:</p><div class="code-container"><pre><code class=" language-bash">git@github.com:android/appfunctions.git
+</code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div></li>
 </ul>
-<ol start="2">
-<li>Open your terminal (or use the Android Studio Terminal) and change to the agent directory:</li>
+<ol start="3">
+<li><p>Open your terminal (or use the Android Studio Terminal) and change to the agent directory:</p></li>
 </ol>
 <div class="code-container"><pre><code class=" language-bash">cd appfunctions/agent
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
-<ol start="3">
-<li>Build and install the agent to your connected device using the provided script:</li>
+<ol start="4">
+<li><p>Build and install the agent to your connected device using the provided script:</p></li>
 </ol>
 <div class="code-container"><pre><code class=" language-bash">./run_privileged.sh --build
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
 <p><strong>⚠️ Important Note for Windows Users:</strong></p>
-<p>Because this is a <code>.sh</code> shell script, it will not run in standard Command Prompt or PowerShell. You must run this command using <strong>Git Bash</strong> (which is installed automatically if you have Git for Windows) or WSL (Windows Subsystem for Linux).</p>
-<p><img alt="run_privlaged" src="assets/run_privlaged.gif"></p>
+<p>Because this is a <code>.sh</code> shell script, it will not run in standard Command Prompt or PowerShell. You must run this command using <strong>Git Bash</strong> (which is installed automatically if you have Git for Windows) or WSL (Windows Subsystem for Linux). If you used the Android Studio Terminal to install the Android CLI, you can switch the terminal dropdown in Android Studio from &quot;PowerShell&quot; to &quot;Git Bash&quot; right in the IDE.</p>
+<p><img alt="run_privileged" src="assets/run_privileged.gif"></p>
 
     </google-codelab-step>
     <google-codelab-step label="Using the Testing Agent" duration="2">
-      <p>The first thing we can do is check that the agent sees the App Functions. You can enter parameters and get back the exact results the function returns (no AI involvement yet) and execute functions that update the data.</p>
+      <p>The first thing we can do is check that the agent sees the App Functions. Using the dropdown, check which apps have app functions. You can enter parameters and get back the exact results the function returns (no AI involvement yet) and execute functions that update the data.</p>
 <p><img alt="agent_debug" src="assets/agent_debug.gif"></p>
 <p>Now we know it can see our app and the available App Functions, let&#39;s hook it up to Gemini!</p>
 
@@ -291,49 +549,53 @@ Running on Darwin 25.5.0 (arm64)
     <google-codelab-step label="Get a Gemini API Key to Test with Gemini" duration="2">
       <p>To give our Testing Agent a brain, we need a Gemini API key. We will be using the free tier so no need to add a credit card or sign up to a pro plan.</p>
 <ol>
-<li>Go to <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</li>
-<li>Sign in with your Google account.</li>
-<li>Click the <strong>Get API key</strong> button in the left-hand menu.</li>
+<li><p>Go to <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</p></li>
+<li><p>Sign in with your Google account.</p></li>
+<li><p>Click the <strong>Get API key</strong> button in the left-hand menu.</p></li>
 </ol>
 <p><img alt="ai_studio_annotated_1" src="assets/ai_studio_annotated_1.png"></p>
 <ol start="4">
-<li>Click <strong>Create API key</strong></li>
+<li><p>Click <strong>Create API key</strong></p></li>
 </ol>
 <p><img alt="ai_studio_annotated_2" src="assets/ai_studio_annotated_2.png"></p>
 <ol start="5">
-<li>Click <strong>Create project</strong> in the <strong>Choose an imported project</strong> dropdown</li>
+<li><p>Click <strong>Create project</strong> in the <strong>Choose an imported project</strong> dropdown</p></li>
 </ol>
 <p><img alt="ai_studio_annotated_3" src="assets/ai_studio_annotated_3.png"></p>
 <ol start="6">
-<li>Enter the project name and click <strong>Create project</strong></li>
+<li><p>Enter the project name and click <strong>Create project</strong></p></li>
 </ol>
 <p><img alt="ai_studio_annotated_4" src="assets/ai_studio_annotated_4.png"></p>
 <ol start="7">
-<li>Click <strong>Create key</strong></li>
+<li><p>Click <strong>Create key</strong></p></li>
 </ol>
 <p><img alt="ai_studio_annotated_5" src="assets/ai_studio_annotated_5.png"></p>
 <ol start="8">
-<li>Copy the generated key using the copy icon or the <strong>Copy key</strong> button</li>
+<li><p>Copy the generated key using the copy icon or the <strong>Copy key</strong> button</p></li>
 </ol>
 <p><img alt="ai_studio_annotated_6" src="assets/ai_studio_annotated_6.png"></p>
 <ol start="9">
-<li>If you missed copying it, you can now find it in the list of keys in <a href="https://aistudio.google.com/app/apikey" target="_blank">AI Studio</a></li>
+<li><p>If you missed copying it, you can now find it in the list of keys in <a href="https://aistudio.google.com/app/apikey" target="_blank">AI Studio</a></p></li>
 </ol>
 <p><img alt="ai_studio_annotated_7" src="assets/ai_studio_annotated_7.png"></p>
+<aside class="warning"><p><strong>Warning:</strong> Never commit your API key to public source control. Store it locally in your <code>local.properties</code> file or in a secure location like a Github secret variable.</p></aside>
 
     </google-codelab-step>
     <google-codelab-step label="Test it Live!" duration="5">
       <p>This is where the magic happens. We are going to ask the agent a natural language question and watch it trigger our app&#39;s specific function.</p>
 <ol>
-<li>Open the <strong>AppFunctions Testing Agent</strong> app on your Android device/emulator.</li>
-<li>Navigate to the <strong>Settings</strong> screen. Paste your Gemini API key (copied from the previous step) into the settings/configuration screen of the agent.</li>
+<li><p>Open the <strong>AppFunctions Testing Agent</strong> app on your Android device/emulator.</p></li>
+<li><p>Navigate to the <strong>Settings</strong> screen. Paste your Gemini API key (copied from the previous step) into the settings/configuration screen of the agent.</p></li>
 </ol>
 <p><img alt="api_key" src="assets/api_key.gif"></p>
 <ol start="3">
-<li>Navigate to the <strong>Agent Demo</strong>, type a natural language prompt that targets the function we wrote. For example:<em>&quot;I have 4 friends coming over for 2 hours and we love strategy games. What should we play?&quot;</em></li>
-<li>Press <strong>send</strong>.</li>
+<li><p>Navigate to the <strong>Agent Demo</strong>, type a natural language prompt that targets the function we wrote. For example:</p><p><em>&quot;I have 4 friends coming over for 2 hours and we love strategy games. What should we play?&quot;</em></p></li>
+<li><p>Press <strong>send</strong>.</p></li>
 </ol>
-<p><img alt="agent_demo_edited" src="assets/agent_demo_edited.gif"><em>Some sequences may be shortened!</em></p>
+<figure>
+<img alt="agent_demo_edited" src="assets/agent_demo_edited.gif">
+<figcaption><em>Some sequences may be shortened!</em></figcaption>
+</figure>
 <p>You will see the agent process the prompt (note - it may take a bit longer than my video!), discover our <code>queryGames</code> App Function, map &quot;4 friends&quot; and &quot;2 hours&quot; to our function&#39;s parameters, and instantly surface the correct game from our database!</p>
 <p>If we think back to our KDoc prompt:</p>
 <div class="code-container"><pre><code class=" language-kotlin">/**  
@@ -346,15 +608,16 @@ Running on Darwin 25.5.0 (arm64)
  */
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-icons">content_copy</span><span>Copy</span></button></div>
 <p>We did not ask for the agent to go grab any extra information, but it did include the description about the games from the internet to make it more engaging!</p>
-<p><strong>Something for you to try:</strong> Now ask Gemini to add a play then go and check to see if it has worked in the app.</p>
+<h3>Something for you to try</h3>
+<p>Now ask Gemini to add a play of one of the games then go and check to see if it has worked in the app.</p>
 
     </google-codelab-step>
     <google-codelab-step label="Wrapping Up" duration="1">
       <p>This perfectly highlights the magic of agentic AI. Our app did the heavy lifting of querying the local database for the exact constraints. But Gemini took over the presentation layer. It seamlessly combined our app&#39;s strictly structured local data with its own vast world knowledge to create a conversational, engaging response for the user, entirely for free.</p>
 <p>Think about what this means for us as developers! In a traditional app, if we wanted to show a dynamic summary or thematic description of the game, we’d have to build another API call, design a new UI layout, and wire it all up to tie it all together. With App Functions, we just hand the raw data back to the agent, and it handles the formatting and contextual enrichment automatically. We get to focus on our app&#39;s core logic, and the AI handles the rest.</p>
 <p>It does show exactly why your KDocs are so critical. We didn&#39;t explicitly tell the agent to go search the web for descriptions, but because our <code>@AppFunction</code> parameters and return types were clearly documented—and we set <code>isDescribedByKDoc = true</code>—the LLM understood exactly what kind of entity it was holding. It then intuitively knew that adding a thematic description would best answer the user&#39;s implicit intent. The better your comments, the smarter the agent behaves!</p>
-<p>While the App Functions API is still in private preview, there is absolutely nothing stopping you from preparing your app right now. By annotating your key features today, testing them locally with ADB, and refining those KDocs, you&#39;ll be lightyears ahead when the API opens up to the public. If you&#39;re looking for a shortcut, try the dedicated AppFunctions agent skill in the Android skills repository to automatically generate the required Kotlin code and metadata configurations. Take a look at your app&#39;s core workflows, pick one that users would love to trigger with their voice, and start building!</p>
-<p>Your app is about to get a whole lot smarter!</p>
+<p>While the App Functions API is still in private preview, there is absolutely nothing stopping you from preparing your app right now. By annotating your key features today, testing them locally with ADB, and refining those KDocs, you&#39;ll be lightyears ahead when the API opens up to the public. If you&#39;re looking for a shortcut, try the dedicated AppFunctions agent skill in the Android skills repository to automatically generate the required Kotlin code and metadata configurations. Take a look at your app&#39;s core workflows, pick one that users would love to trigger using natural language or even with their voice, and give it a try!</p>
+<p><strong>Start building, get those functions ready, and introduce your codebase to Gemini. AI, meet App!</strong></p>
 
     </google-codelab-step>
   </google-codelab>

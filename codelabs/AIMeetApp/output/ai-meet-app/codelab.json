@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "../../",
   "mainga": "",
-  "updated": "2026-08-03T10:18:14.291Z",
+  "updated": "2026-08-04T12:13:20.775Z",
   "id": "ai-meet-app",
   "duration": 50,
   "title": "AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions",
@@ -14,6 +14,6 @@
   "category": ["Android", "App Functions", "AI", "Kotlin", "Gemini"],
   "tags": ["tutorial", "beginner"],
   "feedback": "",
-  "image": "assets/adb_devices.png",
+  "image": "assets/sync_now.png",
   "url": "ai-meet-app"
 }
