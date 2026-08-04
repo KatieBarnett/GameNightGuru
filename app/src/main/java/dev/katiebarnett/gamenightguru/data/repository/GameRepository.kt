@@ -6,9 +6,11 @@ import dev.katiebarnett.gamenightguru.data.database.GameWithStats
 import dev.katiebarnett.gamenightguru.data.database.PlayDao
 import dev.katiebarnett.gamenightguru.data.database.PlayEntity
 import dev.katiebarnett.gamenightguru.data.importer.DataImporter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,14 +34,18 @@ class GameRepositoryImpl @Inject constructor(
 ) : GameRepository {
     override fun getAllGames(): Flow<List<GameEntity>> = gameDao.getAllGamesWithStats().onStart {
         if (gameDao.getGameCount() == 0) {
-            val games = dataImporter.importFromCsv("collection.csv")
+            val games = withContext(Dispatchers.IO) {
+                dataImporter.importFromCsv("collection.csv")
+            }
             gameDao.insertGames(games)
         }
     }.map { it.map { stats -> stats.game } }
 
     override fun getAllGamesWithStats(): Flow<List<GameWithStats>> = gameDao.getAllGamesWithStats().onStart {
         if (gameDao.getGameCount() == 0) {
-            val games = dataImporter.importFromCsv("collection.csv")
+            val games = withContext(Dispatchers.IO) {
+                dataImporter.importFromCsv("collection.csv")
+            }
             gameDao.insertGames(games)
         }
     }

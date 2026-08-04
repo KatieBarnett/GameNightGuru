@@ -13,6 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameNightGuru">
         <!-- Add the GameAppFunctionsService declaration here -->
+        <service
+            android:name=".GameAppFunctionsService"
+            android:permission="android.permission.BIND_APP_FUNCTION_SERVICE"
+            android:exported="true"
+            tools:targetApi="36">
+            <intent-filter>
+                <action android:name="android.app.appfunctions.AppFunctionService" />
+            </intent-filter>
+            <property
+                android:name="android.app.appfunctions.v2"
+                android:value="game_app_functions.xml" />
+        </service>
         <activity
             android:name=".MainActivity"
             android:exported="true"
