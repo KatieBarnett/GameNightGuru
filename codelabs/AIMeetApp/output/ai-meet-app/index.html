@@ -69,13 +69,13 @@
   </script>
 
   <klaat-kodelab-analytics gaid="G-F4ZF2ENF4C"></klaat-kodelab-analytics>
-  <klaat-kodelab codelab-gaid=""
+  <klaat-kodelab 
                   id="ai-meet-app"
                   title="AI, Meet App: Teaching Android Apps to Talk to Gemini via App Functions"
                   environment="Web"
                   feedback-link="">
     <klaat-kodelab-step label="Download and Install Android Studio" duration="0">
-      <p>If you haven&#39;t yet, download and install Android Studio. It is best to have the latest stable version from the <a href="https://developer.android.com/studio" target="_blank">Android Studio download page</a></p>
+      <p>If you haven&#39;t yet, download and install Android Studio. It is best to have the latest stable version from the <a href="https://developer.android.com/studio" target="_blank">Android Studio download page</a>.</p>
 <p>For more detailed instructions, follow the <a href="https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio#0" target="_blank">Download and install Android Studio codelab</a>.</p>
 
     </klaat-kodelab-step>
@@ -93,12 +93,12 @@
     </klaat-kodelab-step>
     <klaat-kodelab-step label="Introducing Game Night Guru" duration="3">
       <p>The demo app for this codelab is <strong>Game Night Guru</strong>, a boardgame collection manager and play tracker. It helps hobbyists keep track of the games they own and log their gaming sessions.</p>
-<a class="klaat-button klaat-button--colored" href="https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip" target="_blank">Download Source Code</a>
-<p>You can also clone it from <a href="https://github.com/android/appfunctions" target="_blank">github</a>:</p>
+<a class="klaat-button klaat-button--primary klaat-button--colored" href="https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip" target="_blank"><span class="material-symbols-outlined">download</span>Download Source Code</a>
+<p>You can also clone it from <a href="https://github.com/KatieBarnett/GameNightGuru" target="_blank">github</a>:</p>
 <ul>
-<li><p>Clone the official App Functions repository using your terminal:</p><div class="code-container"><pre><code class=" language-bash">git clone https://github.com/android/appfunctions.git
+<li><p>Clone the official App Functions repository using your terminal:</p><div class="code-container"><pre><code class=" language-bash">git clone git@github.com:KatieBarnett/GameNightGuru.git
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-symbols-outlined">content_copy</span><span>Copy</span></button></div></li>
-<li><p>Clone the official App Functions repository using your favourite source control application using:</p><div class="code-container"><pre><code class=" language-bash">git@github.com:android/appfunctions.git
+<li><p>Clone the official App Functions repository using your favourite source control application using:</p><div class="code-container"><pre><code class=" language-bash">git@github.com:KatieBarnett/GameNightGuru.git
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-symbols-outlined">content_copy</span><span>Copy</span></button></div></li>
 </ul>
 <p>We will start with the <strong>main</strong> branch.</p>
@@ -188,7 +188,12 @@
 <p>Once your project is synced, open up the <code>GameAppFunctionsService.kt</code> file and uncomment all the code (remove the <code>//</code> at the start of each line).</p>
 <aside class="special"><p><strong>Tip</strong>: To make it quicker, just highlight the commented lines and press <code>Command + /</code> on a Mac or <code>Ctrl + /</code> on Windows to uncomment everything at once.</p></aside>
 <div class="code-container"><pre><code class=" language-kotlin">@RequiresApi(Build.VERSION_CODES.BAKLAVA)  
-abstract class GameAppFunctionsService : AppFunctionService() {  
+@AndroidEntryPoint  
+@AppFunctionServiceEntryPoint(  
+    serviceName = &quot;GameAppFunctionService&quot;,  
+    appFunctionXmlFileName = &quot;game_app_functions&quot;  
+)  
+abstract class GameAppFunctions : AppFunctionService() {  
   
     private lateinit var gameRepository: GameRepository  
   
@@ -215,6 +220,7 @@ abstract class GameAppFunctionsService : AppFunctionService() {
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-symbols-outlined">content_copy</span><span>Copy</span></button></div>
 <aside class="warning"><p>There are also imports at the top of the file, make sure to uncomment those as well, I have not included them above to make it easier to read</p></aside>
 <aside class="special"><p>What is<code>@RequiresApi(Build.VERSION_CODES.BAKLAVA)</code>? This is indicating that this code will only work with API 36 and above (codenamed Baklava). It will be ignored on devices with lower APIs.</p></aside>
+<p>We can also see some annotations on the service adding details about how we will store the metadata later.</p>
 <p>Let&#39;s create the <code>queryGames</code> function, starting with the signature (we&#39;ll get to each of these bits in a moment).</p>
 <div class="code-container"><pre><code class="">suspend fun queryGames(
 ): List&lt;GameSummary&gt; {
@@ -404,7 +410,7 @@ import kotlinx.coroutines.flow.first
 <li><p>Use <code>gameRepository.getGameById(gameId)</code> to check if the game exists.</p></li>
 <li><p>Create a <code>PlayEntity</code> and save it using <code>gameRepository.insertPlay(play)</code>.</p></li>
 <li><p>Return a <code>PlayRecord</code> summary.</p></li>
-<li><p>Include the <code>@AppFunction</code> annotation and full KDocs.&quot;</p></li>
+<li><p>Include the <code>@AppFunction</code> annotation and full KDocs.</p></li>
 </ol></aside>
 <p>I have deliberately made this prompt very specific so that the output is what we want, but feel free to play around with it and see what results you get!</p>
 <p><img alt="app_functions_with_skill" src="assets/app_functions_with_skill.gif"></p>
@@ -439,6 +445,12 @@ data class PlayRecord(
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-symbols-outlined">content_copy</span><span>Copy</span></button></div>
 <p>Your <code>addPlay</code> function should now be ready to use, of course, because this is Generative AI, it may look a bit different to the sample code, but should hopefully function the same.</p>
 <p>In the next step, we&#39;ll build the app and test it with a real AI agent!</p>
+<aside class="positive"><p>If you like, try creating some other functions and be less detailed about the inputs and outputs to see what the AI does.</p><p>Here are some ideas:</p><ul>
+<li><p>A function to list the game with the most number of plays</p></li>
+<li><p>A function to return the most complex game in the library</p></li>
+<li><p>A function to delete or update the most recently recorded play</p></li>
+<li><p>A function to return games that have a particular theme that is passed in by the user (e.g. &#39;Space&#39; or &#39;Animal&#39;)</p></li>
+</ul></aside>
 
     </klaat-kodelab-step>
     <klaat-kodelab-step label="Testing Your App Functions" duration="2">
@@ -516,7 +528,7 @@ Running on Darwin 25.5.0 (arm64)
 <li><p>To use the testing agent, you need to enable Developer Options on your emulator or device</p></li>
 <li><p>To get the Testing Agent app you can do one of the following:</p></li>
 </ol>
-<a class="klaat-button klaat-button--colored" href="https://github.com/android/appfunctions/archive/refs/heads/main.zip" target="_blank">Download Source Code</a>
+<a class="klaat-button klaat-button--primary klaat-button--colored" href="https://github.com/android/appfunctions/archive/refs/heads/main.zip" target="_blank"><span class="material-symbols-outlined">download</span>Download Source Code</a>
 <ul>
 <li><p>Clone the official App Functions repository using your terminal:</p><div class="code-container"><pre><code class=" language-bash">git clone https://github.com/android/appfunctions.git
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-symbols-outlined">content_copy</span><span>Copy</span></button></div></li>
@@ -605,8 +617,7 @@ Running on Darwin 25.5.0 (arm64)
  */
 </code></pre><button type="button" class="copy-button" onclick="copyToClipboard(this)"><span class="material-symbols-outlined">content_copy</span><span>Copy</span></button></div>
 <p>We did not ask for the agent to go grab any extra information, but it did include the description about the games from the internet to make it more engaging!</p>
-<h3>Something for you to try</h3>
-<p>Now ask Gemini to add a play of one of the games then go and check to see if it has worked in the app.</p>
+<aside class="positive"><p><strong>Something for you to try</strong></p><p>Now ask Gemini to add a play of one of the games then go and check to see if it has worked in the app.</p></aside>
 
     </klaat-kodelab-step>
     <klaat-kodelab-step label="Wrapping Up" duration="1">
@@ -617,6 +628,7 @@ Running on Darwin 25.5.0 (arm64)
 <p><strong>Start building, get those functions ready, and introduce your codebase to Gemini. AI, meet App!</strong></p>
 
     </klaat-kodelab-step>
+    <div slot="footer" class="kodelab-footer">Codelab generated using <a href="https://klaat.kartikarora.me" target="_blank" rel="noopener">Klaat</a> - A tool made by <a href="https://kartikarora.me" target="_blank" rel="noopener">Kartik Arora</a></div>
   </klaat-kodelab>
 
   <!-- Klaat custom elements (replaces google's codelab-elements.js) -->

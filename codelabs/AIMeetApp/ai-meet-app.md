@@ -12,7 +12,7 @@ tags: tutorial, beginner
 ## Download and Install Android Studio
 Duration: 0
 
-If you haven't yet, download and install Android Studio. It is best to have the latest stable version from the [Android Studio download page](https://developer.android.com/studio)
+If you haven't yet, download and install Android Studio. It is best to have the latest stable version from the [Android Studio download page](https://developer.android.com/studio).
 
 For more detailed instructions, follow the [Download and install Android Studio codelab](https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio#0).
 
@@ -40,16 +40,16 @@ Duration: 3
 
 The demo app for this codelab is **Game Night Guru**, a boardgame collection manager and play tracker. It helps hobbyists keep track of the games they own and log their gaming sessions.  
 
-[Download Source Code](https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip)
+[Download Source Code](https://github.com/KatieBarnett/GameNightGuru/archive/refs/heads/main.zip){.buttonPrimary}
 
-You can also clone it from [github](https://github.com/android/appfunctions):
+You can also clone it from [github](https://github.com/KatieBarnett/GameNightGuru):
 - Clone the official App Functions repository using your terminal:
   ```bash
-  git clone https://github.com/android/appfunctions.git
+  git clone git@github.com:KatieBarnett/GameNightGuru.git
   ```
 - Clone the official App Functions repository using your favourite source control application using:
   ```bash
-  git@github.com:android/appfunctions.git
+  git@github.com:KatieBarnett/GameNightGuru.git
   ```
 
 We will start with the **main** branch.
@@ -147,7 +147,12 @@ Once your project is synced, open up the `GameAppFunctionsService.kt` file and u
 
 ```kotlin
 @RequiresApi(Build.VERSION_CODES.BAKLAVA)  
-abstract class GameAppFunctionsService : AppFunctionService() {  
+@AndroidEntryPoint  
+@AppFunctionServiceEntryPoint(  
+    serviceName = "GameAppFunctionService",  
+    appFunctionXmlFileName = "game_app_functions"  
+)  
+abstract class GameAppFunctions : AppFunctionService() {  
   
     private lateinit var gameRepository: GameRepository  
   
@@ -176,6 +181,8 @@ abstract class GameAppFunctionsService : AppFunctionService() {
 > {.warning} There are also imports at the top of the file, make sure to uncomment those as well, I have not included them above to make it easier to read 
 
 > {.special} What is `@RequiresApi(Build.VERSION_CODES.BAKLAVA)`? This is indicating that this code will only work with API 36 and above (codenamed Baklava). It will be ignored on devices with lower APIs.
+
+We can also see some annotations on the service adding details about how we will store the metadata later. 
 
 Let's create the `queryGames` function, starting with the signature (we'll get to each of these bits in a moment).
 
@@ -442,7 +449,7 @@ In the Gemini chat box, enter the following prompt:
 > 2. Use `gameRepository.getGameById(gameId)` to check if the game exists.
 > 3. Create a `PlayEntity` and save it using `gameRepository.insertPlay(play)`.
 > 4. Return a `PlayRecord` summary.
-> 5. Include the `@AppFunction` annotation and full KDocs."
+> 5. Include the `@AppFunction` annotation and full KDocs.
 
 I have deliberately made this prompt very specific so that the output is what we want, but feel free to play around with it and see what results you get!
 
@@ -485,6 +492,14 @@ data class PlayRecord(
 Your `addPlay` function should now be ready to use, of course, because this is Generative AI, it may look a bit different to the sample code, but should hopefully function the same. 
 
 In the next step, we'll build the app and test it with a real AI agent!
+
+> {.positive} If you like, try creating some other functions and be less detailed about the inputs and outputs to see what the AI does. 
+> 
+> Here are some ideas:
+>  - A function to list the game with the most number of plays
+>  - A function to return the most complex game in the library
+>  - A function to delete or update the most recently recorded play
+>  - A function to return games that have a particular theme that is passed in by the user (e.g. 'Space' or 'Animal')
 
 ## Testing Your App Functions
 Duration: 2
@@ -615,7 +630,7 @@ Google provides a privileged Testing Agent app that acts as a stand-in for Gemin
 
 2. To get the Testing Agent app you can do one of the following:
 
-[Download Source Code](https://github.com/android/appfunctions/archive/refs/heads/main.zip)
+[Download Source Code](https://github.com/android/appfunctions/archive/refs/heads/main.zip){.buttonPrimary}
 
 - Clone the official App Functions repository using your terminal:
   ```bash
@@ -725,8 +740,9 @@ If we think back to our KDoc prompt:
 
 We did not ask for the agent to go grab any extra information, but it did include the description about the games from the internet to make it more engaging!
 
-### Something for you to try
-Now ask Gemini to add a play of one of the games then go and check to see if it has worked in the app.
+>{.positive} **Something for you to try**
+>
+>Now ask Gemini to add a play of one of the games then go and check to see if it has worked in the app.
 
 ## Wrapping Up
 Duration: 1
