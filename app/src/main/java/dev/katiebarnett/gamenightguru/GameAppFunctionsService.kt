@@ -1,5 +1,7 @@
 package dev.katiebarnett.gamenightguru
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appfunctions.AppFunction
@@ -113,6 +115,59 @@ abstract class GameAppFunctions : AppFunctionService() {
         )
     }
 
+    /**
+     * Delete the most recent play of a specific game.
+     * Required workflow: Call [queryGames] first to find the correct [gameId].
+     * **Constraint:** Before deleting a play, you MUST explicitly ask the user for confirmation. Show the game name, the date, and the play details (rating, numPlayers, playTime) and ask "Are you sure you want to delete this play?".
+     *
+     * @param gameId The unique identifier of the game.
+     * @return Confirmation of the deleted play or a message if no plays were found.
+     */
+    @AppFunction(isDescribedByKDoc = true)
+    suspend fun deleteLatestPlay(
+        gameId: Long
+    ): String {
+        val game = gameRepository.getGameById(gameId)
+            ?: throw AppFunctionElementNotFoundException("Game with ID $gameId not found")
+
+        val plays = gameRepository.getPlaysForGame(gameId).first()
+        if (plays.isEmpty()) {
+            return "No plays found for game ${game.objectName}."
+        }
+
+        val playToDelete = plays.first() // Assuming getPlaysForGame orders by date/id descending
+        gameRepository.deletePlay(playToDelete)
+
+        return "Successfully deleted the most recent play for ${game.objectName}."
+    }
+
+    /**
+     * Provide a way to open the game's plays in the app.
+     * Required workflow: Call [queryGames] first to find the correct [gameId].
+     * **Constraint:** You MUST present the returned `openPlaysAction` to the user as a button so they can open the app and view their plays.
+     *
+     * @param gameId The unique identifier of the game.
+     * @return A button to open the Game Night Guru app with a pending intent
+     */
+    @AppFunction(isDescribedByKDoc = true)
+    suspend fun getPlays(
+        gameId: Long
+    ): PendingIntent {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            putExtra("gameId", gameId)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            gameId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return pendingIntent
+    }
+
     private fun extractMinAge(ageRange: String): Int {
         return ageRange.filter { it.isDigit() }.toIntOrNull() ?: 0
     }
@@ -148,4 +203,17 @@ data class PlayRecord(
     val playTimeMinutes: Int,
     /** The rating given to this play */
     val rating: Float
+)
+
+/**
+ * The result of querying plays for a game.
+ */
+@AppFunctionSerializable(isDescribedByKDoc = true)
+data class GamePlaysResult(
+    /** The name of the game */
+    val gameName: String,
+    /** The list of plays for this game */
+    val plays: List<PlayRecord>,
+    /** Action to open the app and view the plays. Present this action to the user as a UI element so they can click it. */
+    val openPlaysAction: PendingIntent
 )

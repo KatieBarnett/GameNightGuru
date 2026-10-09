@@ -18,6 +18,7 @@ import dev.katiebarnett.gamenightguru.ui.theme.GameNightGuruTheme
 
 data object GameListRoute
 data class GameDetailRoute(val gameId: Long)
+data object PlayListRoute
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,7 +28,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GameNightGuruTheme {
-                val backStack = remember { mutableStateListOf<Any>(GameListRoute) }
+                val backStack = remember { 
+                    val initialRoute = mutableStateListOf<Any>(GameListRoute)
+                    if (intent.hasExtra("gameId")) {
+                        initialRoute.add(GameDetailRoute(intent.getLongExtra("gameId", 0L)))
+                    }
+                    initialRoute
+                }
                 
                 NavDisplay(
                     backStack = backStack,
@@ -41,12 +48,20 @@ class MainActivity : ComponentActivity() {
                             GameListScreen(
                                 onGameClick = { gameId ->
                                     backStack.add(GameDetailRoute(gameId))
+                                },
+                                onPlayListClick = {
+                                    backStack.add(PlayListRoute)
                                 }
                             )
                         }
                         entry<GameDetailRoute> { route ->
                             GameDetailScreen(
                                 gameId = route.gameId, 
+                                onBack = { backStack.removeLastOrNull() }
+                            )
+                        }
+                        entry<PlayListRoute> {
+                            dev.katiebarnett.gamenightguru.ui.plays.PlayListScreen(
                                 onBack = { backStack.removeLastOrNull() }
                             )
                         }

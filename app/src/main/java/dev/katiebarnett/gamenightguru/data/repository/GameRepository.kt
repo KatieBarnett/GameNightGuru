@@ -5,6 +5,7 @@ import dev.katiebarnett.gamenightguru.data.database.GameEntity
 import dev.katiebarnett.gamenightguru.data.database.GameWithStats
 import dev.katiebarnett.gamenightguru.data.database.PlayDao
 import dev.katiebarnett.gamenightguru.data.database.PlayEntity
+import dev.katiebarnett.gamenightguru.data.database.PlayWithGame
 import dev.katiebarnett.gamenightguru.data.importer.DataImporter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,7 @@ interface GameRepository {
     suspend fun insertGames(games: List<GameEntity>)
     
     // Play methods
+    fun getAllPlays(): Flow<List<PlayWithGame>>
     fun getPlaysForGame(gameId: Long): Flow<List<PlayEntity>>
     suspend fun insertPlay(play: PlayEntity)
     suspend fun deletePlay(play: PlayEntity)
@@ -53,6 +55,8 @@ class GameRepositoryImpl @Inject constructor(
     override suspend fun getGameById(gameId: Long): GameEntity? = gameDao.getGameById(gameId)
     
     override suspend fun insertGames(games: List<GameEntity>) = gameDao.insertGames(games)
+
+    override fun getAllPlays(): Flow<List<PlayWithGame>> = playDao.getAllPlays()
 
     override fun getPlaysForGame(gameId: Long): Flow<List<PlayEntity>> = playDao.getPlaysForGame(gameId)
 
