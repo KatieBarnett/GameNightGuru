@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appfunctions.AppFunction
+import androidx.appfunctions.AppFunctionDeclaration
 import androidx.appfunctions.AppFunctionElementNotFoundException
 import androidx.appfunctions.AppFunctionSerializable
 import androidx.appfunctions.AppFunctionService
@@ -56,7 +57,7 @@ abstract class GameAppFunctions : AppFunctionService() {
      * @param minAge The minimum age of the players.
      * @return A list of games matching the criteria.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun queryGames(
         maxDurationMinutes: Int? = null,
         numPlayers: Int? = null,
@@ -89,7 +90,7 @@ abstract class GameAppFunctions : AppFunctionService() {
      * @param rating The rating for this play (1-10).
      * @return Confirmation of the added play.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun addPlay(
         gameId: Long,
         numPlayers: Int,
@@ -123,7 +124,7 @@ abstract class GameAppFunctions : AppFunctionService() {
      * @param gameId The unique identifier of the game.
      * @return Confirmation of the deleted play or a message if no plays were found.
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun deleteLatestPlay(
         gameId: Long
     ): String {
@@ -149,7 +150,7 @@ abstract class GameAppFunctions : AppFunctionService() {
      * @param gameId The unique identifier of the game.
      * @return A button to open the Game Night Guru app with a pending intent
      */
-    @AppFunction(isDescribedByKDoc = true)
+    @AppFunctionDeclaration(isDescribedByKDoc = true)
     suspend fun getPlays(
         gameId: Long
     ): PendingIntent {
