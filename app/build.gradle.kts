@@ -49,8 +49,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // App Functions
-    implementation("androidx.appfunctions:appfunctions:1.0.0-alpha13")
-    ksp("androidx.appfunctions:appfunctions-compiler:1.0.0-alpha13")
+    implementation("androidx.appfunctions:appfunctions:1.0.0-beta01")
+    ksp("androidx.appfunctions:appfunctions-compiler:1.0.0-beta01")
 
     // Room
     implementation(libs.androidx.room.runtime)
